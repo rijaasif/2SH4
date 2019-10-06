@@ -1,0 +1,15 @@
+Put the scripts in the folder which you want to use them in.
+
+PUT_FOLDER
+	- finds all '.c' files in the folder which the script is in
+	- puts each '.c' file in their own folder
+	- each folder has the same name as the '.c' file
+
+GET_FILES
+	- walks through entire directory which script is in
+	- finds all '.c' files
+	- puts the copy of the '.c' file in the folder which the script is in
+
+GET_TXT
+	- same method as GET_FILES
+	- renames file extension from '.c' to '.txt'
