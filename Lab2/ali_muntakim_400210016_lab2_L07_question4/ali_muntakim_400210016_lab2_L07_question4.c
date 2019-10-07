@@ -14,6 +14,7 @@ int main() {
     //char word[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     char word[] = "pomegranate";
 
+    printf("The word is: %s\n", word);
     letter_freq(word, freq);    //calls function
 
     return 0;

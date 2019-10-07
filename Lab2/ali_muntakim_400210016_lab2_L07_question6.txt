@@ -24,7 +24,7 @@ int main() {
     print_vector(pos1, k1);
 
     int val2[] = {23, -7, 48}, pos2[] = {2, 4, 7}; //initializes 'efficient' vectors
-    int k2 = sizeof(val_2) / sizeof(val2[0]); //gets size or # of non-zero elements
+    int k2 = sizeof(val2) / sizeof(val2[0]); //gets size or # of non-zero elements
     int size2 = 10;        //the size of the to-be reconstructed vector
     int vector2[size2];    //initialization of to-be reconstructed vector
 
