@@ -73,15 +73,11 @@ void addEff(int val1[], int val2[], int val3[],
             pos3[k] = pos2[j];          //...set pos3 as pos2
             j++;                        //...index for 2nd vector counts up
         }
-        else if(val1[i] + val2[j] != 0){    //this condition occurs only if pos1 = pos2, then...
+        else {                              //this condition occurs if overlap in pos, then...
             val3[k] = val1[i] + val2[j];    //...val3 is equal to sum of val1 and val2
             pos3[k] = pos1[i];              //...pos3 is equal to either pos1 or pos2
             i++;        //index for 1st and 2nd vector counts up
             j++;
-        } else {
-            /* error is thrown if values add to 0 (even though they shouldn't) */
-            printf("Error: Values adds to 0\n");
-            exit(0);    //exits the program
         }
         k++;    //index for 3rd vector counts up
     }
