@@ -7,13 +7,21 @@ void print_string(const char string[]);
 
 int main() {
 
-    char string1[] = "pomegranate";     //source string
+    char string1[128];  //source string
+    int n = 4;          //size of destination
 
-    int n = 5;              //size of destination string
-    char string2[n+1];      //destination has extra spot for null terminator
+    printf("enter word: ");     //receive string from user
+    gets(string1);
+    printf("enter size of destination: ");  //receive size of dest from user
+    scanf("%d", &n);
+    printf("\n");
+
+    char string2[n+1];      //destination has extra spot for null terminato r
 
     string_copy(string1, string2, n);   //calls copy_string()
+    printf("srce string: ");
     print_string(string1);  //prints string1
+    printf("dest string: ");
     print_string(string2);  //prints string2
 
     return 0;

@@ -12,7 +12,11 @@ int main() {
         freq[i] = 0;
 
     //char word[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    char word[] = "pomegranate";
+    char word[128];     //initializes word
+
+    printf("Enter the word: ");
+    gets(word);         //gets word from user
+    printf("\n");
 
     printf("The word is: %s\n", word);
     letter_freq(word, freq);    //calls function

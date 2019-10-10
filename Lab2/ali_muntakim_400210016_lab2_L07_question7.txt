@@ -11,11 +11,11 @@ int unionSize(int arr1[], int arr2[], int m, int n);
 int main() {
 
     /* initialization of 1st efficient vector and size */
-    int val1[] = {1, -1, 1, 1}, pos1[] = {1, 2, 4, 7};
+    int val1[] = {-1, 7}, pos1[] = {2, 4};
     int k1 = sizeof(val1) / sizeof(val1[0]);    //size of 1st vector
 
     /* initialization of 2nd efficient vector and size */
-    int val2[] = {1, 2, 2}, pos2[] = {2, 4, 6};
+    int val2[] = {4, 1, 2, -8}, pos2[] = {0, 2, 4, 6};
     int k2 = sizeof(val2) / sizeof(val2[0]);    //size of 2nd vector
 
     /* gets k3 is the size of the union of 1st and 2nd vector sets */
@@ -34,10 +34,9 @@ int main() {
     print_vector(val2, k2);
     printf("pos2: ");
     print_vector(pos2, k2);
-    printf("\nval3: ");
-    print_vector(val3, k3);
-    printf("pos3: ");
-    print_vector(pos3, k3);
+    printf("\n");
+
+    print_sum(val3, pos3, k3);
 
     return 0;
 }
@@ -49,6 +48,20 @@ void print_vector(int vector[], int size) {
         printf("%d ", vector[i]);
     }
     printf("\n");
+}
+
+/* prints the sum of the efficient addition*/
+void print_sum(int val[], int pos[], int size) {
+    int i;
+    printf("vector 3: \n");
+    for(i=0; i<size; i++) {
+        if(val[i] == 0) {   //skip printing if the value is 0
+            continue;
+        } else {
+            printf("val: %d\tpos: %d\n", val[i], pos[i]);
+        }
+    }
+
 }
 
 /* this function essentially works by taking the union of each */
@@ -67,16 +80,14 @@ void addEff(int val1[], int val2[], int val3[],
             val3[k] = val1[i];      //...set val3 as val1
             pos3[k] = pos1[i];      //...set pos3 as pos1
             i++;                    //...index for 1st vector counts up
-        }
-        else if(pos2[j] < pos1[i]) {    //if pos2 at j is less than pos1 at i...
-            val3[k] = val2[j];          //...set val3 as val2
-            pos3[k] = pos2[j];          //...set pos3 as pos2
-            j++;                        //...index for 2nd vector counts up
-        }
-        else {                              //this condition occurs if pos1 == pos2, then...
-            val3[k] = val1[i] + val2[j];    //...val3 is equal to sum of val1 and val2
-            pos3[k] = pos1[i];              //...pos3 is equal to either pos1 or pos2
-            i++;        //index for 1st and 2nd vector counts up
+        } else if(pos2[j] < pos1[i]) {      //if pos2 at j is less than pos1 at i...
+            val3[k] = val2[j];              //...set val3 as val2
+            pos3[k] = pos2[j];              //...set pos3 as pos2
+            j++;                            //...index for 2nd vector counts up
+        } else {                                //this condition occurs if pos1 == pos2, then...
+            val3[k] = val1[i] + val2[j];        //...val3 is equal to sum of val1 and val2
+            pos3[k] = pos1[i];                  //...pos3 is equal to either pos1 or pos2
+            i++;                                //index for 1st and 2nd vector counts up
             j++;
         }
         k++;    //index for 3rd vector counts up

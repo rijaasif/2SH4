@@ -9,7 +9,7 @@ void print_vector(int vector[], int size);
 
 int main() {
 
-    int vector1[] = {0, 0, 23, 0, -7, 0, 0, 48, 0, 0};  //initializes vector
+    int vector1[] = {0, 0, -1, 28, 0, 0, 0, 7, 0, -5, 0, 0, 0};  //initializes vector
     int size1 = sizeof(vector1) / sizeof(vector1[0]);   //gets size of vector
     int k1 = non_zero_count(vector1, size1);    //stores # of non-zero elements in vector
     int val1[k1], pos1[k1];     //arrays to store non-zero elements and positions
@@ -22,10 +22,11 @@ int main() {
     print_vector(val1, k1);
     printf("pos: ");
     print_vector(pos1, k1);
+    printf("\n");
 
-    int val2[] = {23, -7, 48}, pos2[] = {2, 4, 7}; //initializes 'efficient' vectors
+    int val2[] = {-1, 28, 7, -5}, pos2[] = {2, 3, 7, 9}; //initializes 'efficient' vectors
     int k2 = sizeof(val2) / sizeof(val2[0]); //gets size or # of non-zero elements
-    int size2 = 10;        //the size of the to-be reconstructed vector
+    int size2 = 13;        //the size of the to-be reconstructed vector
     int vector2[size2];    //initialization of to-be reconstructed vector
 
     /* reconsctructs the sparse vector */

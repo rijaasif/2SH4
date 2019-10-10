@@ -10,23 +10,30 @@ double norm2(double vector[], int n);
 
 int main() {
     //declaring size and vectors
-    int n = 3;
-    double vector1[] = {1, 2, 3};
-    double vector2[] = {2, 4, 6};
-    double vector3[] = {0, 0, 0};
+    int n = 5;
+    double vector1[] = {3, 0, 4, 5, -1};
+    double vector2[] = {6, 1, -1, 8, 2};
+    double vector3[] = {0, 0, 0, 0, 0};
 
     //printing each vector
     printf("printing all vectors:\n");
+    printf("v1: ");
     print_vector(vector1, n);
+    printf("v2: ");
     print_vector(vector2, n);
+    printf("v3: ");
     print_vector(vector3, n);
     printf("\n");
 
     //adding vector1 and vector2 to vector3, then printing all
-    printf("after adding, vector3 = vector1 + vector2\n");
     add_vectors(vector1, vector2, vector3, n);
+
+    printf("after adding, vector3 = vector1 + vector2\n");
+    printf("v1: ");
     print_vector(vector1, n);
+    printf("v2: ");
     print_vector(vector2, n);
+    printf("v3: ");
     print_vector(vector3, n);
     printf("\n");
 

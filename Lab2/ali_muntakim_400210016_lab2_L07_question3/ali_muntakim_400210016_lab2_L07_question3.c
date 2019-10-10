@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 /* defines the size of square matrix */
-#define N 10
+#define N 5
 
 /* prototype declaration */
 void print_diag_order(int matrix[N][N]);
