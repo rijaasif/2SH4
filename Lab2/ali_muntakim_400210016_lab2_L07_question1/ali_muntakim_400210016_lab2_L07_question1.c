@@ -23,7 +23,7 @@ int main() {
     printf("\n");
 
     //adding vector1 and vector2 to vector3, then printing all
-    printf("after vector3 = vector1 + vector2\n");
+    printf("after adding, vector3 = vector1 + vector2\n");
     add_vectors(vector1, vector2, vector3, n);
     print_vector(vector1, n);
     print_vector(vector2, n);

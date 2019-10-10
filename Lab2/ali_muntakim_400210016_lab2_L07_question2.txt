@@ -18,9 +18,9 @@ int main() {
     for(i=0; i<N; i++) {        //iterates through rows
         for(j=0; j<N; j++) {    //iterates through columns
             if(i==j)
-                matrix[i][j] = 1;     //sets diagonal elements
+                matrix[i][j] = 2;       //sets diagonal elements
             else
-                matrix[i][j] = 0;       //sets non-diagonal elements
+                matrix[i][j] = 1;       //sets non-diagonal elements
         }
     }
 

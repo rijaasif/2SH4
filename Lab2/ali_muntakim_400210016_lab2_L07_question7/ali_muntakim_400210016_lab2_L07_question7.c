@@ -11,11 +11,11 @@ int unionSize(int arr1[], int arr2[], int m, int n);
 int main() {
 
     /* initialization of 1st efficient vector and size */
-    int val1[] = {1, 1, 1, 1}, pos1[] = {1, 2, 4, 7};
+    int val1[] = {1, -1, 1, 1}, pos1[] = {1, 2, 4, 7};
     int k1 = sizeof(val1) / sizeof(val1[0]);    //size of 1st vector
 
     /* initialization of 2nd efficient vector and size */
-    int val2[] = {2, 2, 2}, pos2[] = {2, 4, 6};
+    int val2[] = {1, 2, 2}, pos2[] = {2, 4, 6};
     int k2 = sizeof(val2) / sizeof(val2[0]);    //size of 2nd vector
 
     /* gets k3 is the size of the union of 1st and 2nd vector sets */
@@ -73,7 +73,7 @@ void addEff(int val1[], int val2[], int val3[],
             pos3[k] = pos2[j];          //...set pos3 as pos2
             j++;                        //...index for 2nd vector counts up
         }
-        else {                              //this condition occurs if overlap in pos, then...
+        else {                              //this condition occurs if pos1 == pos2, then...
             val3[k] = val1[i] + val2[j];    //...val3 is equal to sum of val1 and val2
             pos3[k] = pos1[i];              //...pos3 is equal to either pos1 or pos2
             i++;        //index for 1st and 2nd vector counts up
