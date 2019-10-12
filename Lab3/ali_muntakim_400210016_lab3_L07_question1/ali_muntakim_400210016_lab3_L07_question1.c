@@ -6,9 +6,19 @@
 char *my_strcat(const char *const str1, const char *const str2);
 
 int main() {
-    char *str = my_strcat("tuna", "fish");  // pointer to hold returned concat
-    printf("%s\n", str);    // print the concatenation
+    char str1[128], str2[128];    // char arrays (or 'strings') to concatenate
+
+    // get user input for string variables
+    printf("Enter String 1: ");
+    gets(str1);
+    printf("Enter String 2: ");
+    gets(str2);
+    printf("\n");
+
+    char *str = my_strcat(str1, str2);  // pointer to hold returned concat
+    printf("Concatenation: %s\n", str);    // print the concatenation
     free(str);  // free the allocated memory
+
     return 0;
 }
 
@@ -29,7 +39,7 @@ char *my_strcat(const char *const str1, const char *const str2) {
         j++;
     }
 
-    str3[i] = '\0';     // add null terminator to final concat
+    str3[i] = '\0';     // add null terminator to final concatenation
 
     return str3;
 }
