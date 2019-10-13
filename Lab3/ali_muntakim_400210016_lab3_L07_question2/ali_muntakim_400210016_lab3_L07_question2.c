@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 /* defining typedef "student" structure */
 typedef struct{
@@ -16,8 +15,8 @@ typedef struct{
 student **create_class_list(char *filename, int *sizePtr);
 int find(int idNo, student **list, int size);
 void input_grades(char *filename, student **list, int size);
-void compute_final_course_grades();
-void output_final_course_grades();
+void compute_final_course_grades(student **list, int size);
+void output_final_course_grades(char *filename, student **list, int size);
 void print_list(student **list, int size);
 void withdraw(int idNo, student **list, int *sizePtr);
 void destroy_list(student **list, int *sizePtr);
@@ -35,6 +34,7 @@ int main() {
     printf("TESTING find()\n");
     printf("index of %d is %d\n", 2512, find(2512, list, size));
     printf("index of %d is %d\n", 1200, find(1200, list, size));
+    printf("index of %d is %d\n", 9000, find(9000, list, size));
     printf("\n");
 
     /* input grades into list */
@@ -47,7 +47,28 @@ int main() {
     printf("AFTER compute_final_course_grades()\n");
     print_list(list, size);
 
-    free(list);
+    /* write a student IDs and corresponding final grades to 'final_grades,txt' */
+    output_final_course_grades("final_grades.txt", list, size);
+
+    /* withdraw students and print list */
+    int idNo = 9000;
+    withdraw(idNo, list, &size);
+    printf("AFTER withdraw(%d, list, &size)\n", idNo);
+    print_list(list, size);
+    idNo = 1111;
+    withdraw(idNo, list, &size);
+    printf("AFTER withdraw(%d, list, &size)\n", idNo);
+    print_list(list, size);
+    idNo = 1200;
+    withdraw(idNo, list, &size);
+    printf("AFTER withdraw(%d, list, &size)\n", idNo);
+    print_list(list, size);
+
+    /* destroy student list */
+    destroy_list(list, &size);
+    printf("AFTER destroy_list()");
+    print_list(list, size);
+
     return 0;
 }
 
@@ -77,7 +98,7 @@ student **create_class_list(char *filename, int *sizePtr) {
             &list[i]->lastName);        // puts 3rd str into lastName
     }
 
-    fclose(filePtr);    // always close file after reading
+    fclose(filePtr);    // always close file after opening
     return list;
 }
 
@@ -99,7 +120,7 @@ void input_grades(char *filename, student **list, int size) {
 
     /* exit code for if file does not exist */
     if(filePtr == NULL) {
-        printf("ERROR: the file '%s' does not exist\n", filename);
+        printf("ERROR: the file '%s' does not exist\n\n", filename);
         exit(1);
     }
 
@@ -110,7 +131,7 @@ void input_grades(char *filename, student **list, int size) {
         pos = find(idNo, list, size);   // finds the index of student id
         if(pos == -1) {
             /* print error and exit if id number is not in file */
-            printf("ERROR: student in 'project_grades.txt' is not in 'class_list.txt'\n");
+            printf("ERROR: student ID in '%s' is not in student list\n\n", filename);
             exit(1);
         } else {
             fscanf(filePtr, "%d %d",
@@ -123,20 +144,33 @@ void input_grades(char *filename, student **list, int size) {
 /* computes final course grades by taking average of project grades and assigns to student list */
 void compute_final_course_grades(student **list, int size) {
     int i;
-    for(i = 0; i < size; i++) {     //iterates through entire list
-        list[i]->finalGrade = (list[i]->proj1Grade + list[i]->proj2Grade) / 2;
+    for(i = 0; i < size; i++) {     // iterates through entire list
+        list[i]->finalGrade = ((float) list[i]->proj1Grade + (float) list[i]->proj2Grade) / 2;
     }
 }
 
+/* writes the final course grades to an output file */
 void output_final_course_grades(char *filename, student **list, int size) {
-    FILE *filePtr = fopen(filename, "w");
+    FILE *filePtr = fopen(filename, "w");   // opens file to write
 
+    fprintf(filePtr, "%d\n", size);         // writes the number of students on first line
+
+    int i;
+    for(i = 0; i < size; i++) {         // iterates through student list
+        fprintf(filePtr, "%d %.1f\n",
+            list[i]->studentID,         // prints the student ID
+            list[i]->finalGrade);       // prints the final grade
+    }
+
+    fclose(filePtr);    // always close file after opening
 }
 
+/* prints the student list to console */
 void print_list(student **list, int size) {
     int i;
-    for(i = 0; i < size; i++) {
-        printf("%d\t%s %s\t%3d %3d %6.2f\n",
+    for(i = 0; i < size; i++) {     // iterates through entire student list array
+        /* prints each element of student structure */
+        printf("%d\t%s %s\t%3d %3d %6.1f\n",
             list[i]->studentID,
             list[i]->firstName,
             list[i]->lastName,
@@ -147,10 +181,27 @@ void print_list(student **list, int size) {
     printf("\n");
 }
 
+/* withdraws a student from the student list, and reduces class size by one*/
 void withdraw(int idNo, student **list, int *sizePtr) {
-
+    int i, pos = find(idNo, list, *sizePtr);    //finds the position of student ID
+    if(pos == -1) {                         //prints error if the ID is not in list
+        printf("ERROR: student ID '%d' is not in student list\n\n", idNo);
+    } else {
+        (*sizePtr)--;                       //reduce list size by one
+        for(i = pos; i < *sizePtr; i++) {   //iterate through rest of list starting at ID position
+            list[i] = list[i+1];            //collapse list by one, removing i'th position
+        }
+        free(list[i+1]);                    //free the extra element of the list
+    }
 }
 
+/* destroys entire list by emptying it completely */
 void destroy_list(student **list, int *sizePtr) {
-
+    int i;
+    for(i = 0; i < *sizePtr; i++) {
+        free(list[i]);      //frees each student structure
+    }
+    free(*list);            //frees the pointer to list
+    *list = NULL;           //list pointer points to NULL
+    *sizePtr = 0;           //the size of student list is now 0
 }
