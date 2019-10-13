@@ -28,18 +28,24 @@ int main() {
 
     /* create the class list */
     list = create_class_list("class_list.txt", &size);
+    printf("AFTER create_class_list()\n");
     print_list(list, size);
 
     /* testing the find function */
+    printf("TESTING find()\n");
     printf("index of %d is %d\n", 2512, find(2512, list, size));
     printf("index of %d is %d\n", 1200, find(1200, list, size));
     printf("\n");
 
     /* input grades into list */
     input_grades("project_grades.txt", list, size);
+    printf("AFTER input_grades()\n");
     print_list(list, size);
 
-
+    /* compute final grades from project grades */
+    compute_final_course_grades(list, size);
+    printf("AFTER compute_final_course_grades()\n");
+    print_list(list, size);
 
     free(list);
     return 0;
@@ -86,6 +92,7 @@ int find(int idNo, student **list, int size) {
     return -1;  // return -1 by default (if idNo is not in list)
 }
 
+/* reads from input file of grades and puts elements into each student in list */
 void input_grades(char *filename, student **list, int size) {
     FILE *filePtr = fopen(filename, "r");   // file pointer to file name
     int idNo, pos;  // student id number and index position respectively
@@ -113,11 +120,16 @@ void input_grades(char *filename, student **list, int size) {
     }
 }
 
+/* computes final course grades by taking average of project grades and assigns to student list */
 void compute_final_course_grades(student **list, int size) {
-    
+    int i;
+    for(i = 0; i < size; i++) {     //iterates through entire list
+        list[i]->finalGrade = (list[i]->proj1Grade + list[i]->proj2Grade) / 2;
+    }
 }
 
-void output_final_course_grades() {
+void output_final_course_grades(char *filename, student **list, int size) {
+    FILE *filePtr = fopen(filename, "w");
 
 }
 
