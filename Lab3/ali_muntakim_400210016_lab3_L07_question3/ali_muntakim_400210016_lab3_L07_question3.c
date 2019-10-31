@@ -8,7 +8,7 @@ char **read_words(const char *filename, int *nPtr);
 void print_words(char **words, int size);
 void swap_words(char *word1, char *word2);
 void insertion_sort_list(char **words, int size);
-void quick_sort_list(char **words, int size);
+void bubble_sort_list(char **words, int size);
 void free_words(char **words, int *size);
 
 void instructions() {
@@ -17,7 +17,7 @@ void instructions() {
     printf("1. create word list\n");
     printf("2. print words\n");
     printf("3. insertion sort\n");
-    printf("4. quick sort\n");
+    printf("4. bubble sort\n");
     printf("5. destroy list\n\n");
 }
 
@@ -52,8 +52,8 @@ int main() {
                 printf("done.\n");
                 break;
             case 4:
-                printf("Sorting list using QUICK...");
-                quick_sort_list(words, n);
+                printf("Sorting list using BUBBLE...");
+                bubble_sort_list(words, n);
                 printf("done.\n");
                 break;
             case 5:
@@ -115,25 +115,32 @@ void insertion_sort_list(char **words, int size) {
     int letter = 0;
     int i, j;
     for(i = 0; i < size-1; i++) {
+        /* ascending order */
         for(j = i+1; j > 0 && words[j-1][letter] > words[j][letter]; j--) {
             // swap words
             temp = words[j-1];
             words[j-1] = words[j];
             words[j] = temp;
+
         }
     }
 }
 
-void quick_sort_list(char **words, int size) {
+/* useres bubble sort method to sort the list */
+void bubble_sort_list(char **words, int size) {
     char *temp;
     int letter = 0;
     int i, j;
     for(i = 0; i < size-1; i++) {
-        for(j = i+1; j > 0 && words[j-1][letter] > words[j][letter]; j--) {
-            // swap words
-            temp = words[j-1];
-            words[j-1] = words[j];
-            words[j] = temp;
+        /* elements at the end of list are already sorted */
+        for(j = 0; j < size-i-1; j++) {
+            /* ascending order */
+            if(words[j][letter] > words[j+1][letter]) {
+                // swap words
+                temp = words[j];
+                words[j] = words[j+1];
+                words[j+1] = temp;
+            }
         }
     }
 }
