@@ -21,55 +21,81 @@ void print_list(student **list, int size);
 void withdraw(int idNo, student **list, int *sizePtr);
 void destroy_list(student **list, int *sizePtr);
 
+/* instruction set for the program */
+void instructions() {
+    printf("Enter 'prompt' command numbers:\n");
+    printf("0. exit program\n");
+    printf("1. create_class_list\n");
+    printf("2. find\n");
+    printf("3. input_grades\n");
+    printf("4. compute_final_course_grades\n");
+    printf("5. output_final_course_grades\n");
+    printf("6. print_list\n");
+    printf("7. withdraw\n");
+    printf("8. destroy_list\n\n");
+}
+
 int main() {
     int size;           // class size or # of students
     student **list;     // pointer to the beginning of array of pointers of each student
 
-    /* create the class list */
-    list = create_class_list("class_list.txt", &size);
-    printf("AFTER create_class_list()\n");
-    print_list(list, size);
+    instructions();
 
-    /* testing the find function */
-    printf("TESTING find()\n");
-    printf("index of %d is %d\n", 2512, find(2512, list, size));
-    printf("index of %d is %d\n", 1200, find(1200, list, size));
-    printf("index of %d is %d\n", 9000, find(9000, list, size));
-    printf("\n");
-
-    /* input grades into list */
-    input_grades("project_grades.txt", list, size);
-    printf("AFTER input_grades()\n");
-    print_list(list, size);
-
-    /* compute final grades from project grades */
-    compute_final_course_grades(list, size);
-    printf("AFTER compute_final_course_grades()\n");
-    print_list(list, size);
-
-    /* write a student IDs and corresponding final grades to 'final_grades,txt' */
-    output_final_course_grades("final_grades.txt", list, size);
-
-    /* withdraw students and print list */
-    int idNo = 9000;
-    withdraw(idNo, list, &size);
-    printf("AFTER withdraw(%d, list, &size)\n", idNo);
-    print_list(list, size);
-    idNo = 1111;
-    withdraw(idNo, list, &size);
-    printf("AFTER withdraw(%d, list, &size)\n", idNo);
-    print_list(list, size);
-    idNo = 1200;
-    withdraw(idNo, list, &size);
-    printf("AFTER withdraw(%d, list, &size)\n", idNo);
-    print_list(list, size);
-
-    /* destroy student list */
-    destroy_list(list, &size);
-    printf("AFTER destroy_list()");
-    print_list(list, size);
-
-    return 0;
+    /* infinite loop that asks for user prompt*/
+    int prompt;
+    while(1) {
+        printf("Enter prompt: ");
+        scanf("%d", &prompt);
+        switch(prompt) {
+            case 0: // prompt to exit the program
+                printf("\nExiting program...\n");
+                return 0;
+            case 1:
+                printf("Creating class list...");
+                list = create_class_list("class_list.txt", &size);
+                printf("done.\n");
+                break;
+            case 2:
+                printf("Enter index for find function: ");
+                scanf("%d", &prompt);
+                printf("Index of %d is %d\n", prompt, find(prompt, list, size));
+                break;
+            case 3:
+                printf("Inputting grades...");
+                input_grades("project_grades.txt", list, size);
+                printf("done.\n");
+                break;
+            case 4:
+                printf("Computing final grades...");
+                compute_final_course_grades(list, size);
+                printf("done.\n");
+                break;
+            case 5:
+                printf("Outputting final course grades...");
+                output_final_course_grades("final_grades.txt", list, size);
+                printf("done.\n");
+                break;
+            case 6:
+                print_list(list, size);
+                break;
+            case 7:
+                printf("Enter index to withdraw: ");
+                scanf("%d", &prompt);
+                withdraw(prompt, list, &size);
+                printf("Done.\n");
+                break;
+            case 8:
+                printf("Destroying list...");
+                destroy_list(list, &size);
+                printf("done.\n");
+                break;
+            default:
+                printf("\n");
+                instructions(); //print instructions if user enters wrong prompt
+                break;
+        }
+        printf("\n");
+    }
 }
 
 /* function reads the input file and puts elements into an array of structures */
@@ -120,7 +146,7 @@ void input_grades(char *filename, student **list, int size) {
 
     /* exit code for if file does not exist */
     if(filePtr == NULL) {
-        printf("ERROR: the file '%s' does not exist\n\n", filename);
+        printf("ERROR: The file '%s' does not exist.\n", filename);
         exit(1);
     }
 
@@ -131,7 +157,7 @@ void input_grades(char *filename, student **list, int size) {
         pos = find(idNo, list, size);   // finds the index of student id
         if(pos == -1) {
             /* print error and exit if id number is not in file */
-            printf("ERROR: student ID in '%s' is not in student list\n\n", filename);
+            printf("ERROR: Student ID in '%s' is not in student list.\n", filename);
             exit(1);
         } else {
             fscanf(filePtr, "%d %d",
@@ -178,14 +204,13 @@ void print_list(student **list, int size) {
             list[i]->proj2Grade,
             list[i]->finalGrade);
     }
-    printf("\n");
 }
 
 /* withdraws a student from the student list, and reduces class size by one*/
 void withdraw(int idNo, student **list, int *sizePtr) {
     int i, pos = find(idNo, list, *sizePtr);    //finds the position of student ID
     if(pos == -1) {                         //prints error if the ID is not in list
-        printf("ERROR: student ID '%d' is not in student list\n\n", idNo);
+        printf("ERROR: Student ID '%d' is not in student list.\n", idNo);
     } else {
         (*sizePtr)--;                       //reduce list size by one
         for(i = pos; i < *sizePtr; i++) {   //iterate through rest of list starting at ID position
