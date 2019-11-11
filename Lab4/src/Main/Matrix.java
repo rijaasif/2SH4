@@ -37,7 +37,7 @@ public class Matrix {
         /*  if i and j are valid indices of this matrix,
             then the element on row i and column j of this matrix
             is returned; otherwise it throws an exception with message "Invalid indexes".*/
-        if(i >= 0 && i < matrixData.length && j >= 0 && j < matrixData.length) {
+        if(i >= 0 && i < rowsNum && j >= 0 && j < colsNum) {
             return matrixData[i][j];
         } else {
             throw new IndexOutOfBoundsException("Invalid indicess.");
@@ -49,7 +49,7 @@ public class Matrix {
         /*  if i and j are valid indexes of this matrix, then the element on  row i and
             column j of this matrix is assigned the value  x and true is returned;
             otherwise false is returned and no change in the matrix is performed */
-        if(i >= 0 && i < matrixData.length && j >= 0 && j < matrixData.length) {
+        if(i >= 0 && i < rowsNum && j >= 0 && j < colsNum) {
             matrixData[i][j] = x;
             return true;
         } else {
@@ -81,7 +81,7 @@ public class Matrix {
             and throw an exception if any of them is not. The exception detail message should read: "Submatrix not defined".
             Note: The new object should be constructed in such a way that changes in the new matrix do not affect
             this Matrix. */
-        if(i >= 0 && i < matrixData.length && j >= 0 && j < matrixData.length) {
+        if(i >= 0 && i < rowsNum && j >= 0 && j < colsNum) {
             int[][] subMatrix = new int[i][j];
             for(int p=0; p<i; p++)
                 for(int q=0; q<j; q++)
@@ -94,9 +94,9 @@ public class Matrix {
 
     //method to check if matrix is upper triangular
     public boolean isUpperTr() {
-        for(int i=0; i<matrixData.length; i++)
-            for(int j=0; j<i; j++)          //iterates only below i=j axis
-                if(matrixData[i][j] != 0)   //returns false if non-zero value encountered
+        for(int i=0; i<rowsNum; i++)
+            for(int j=0; j<i && j<colsNum; j++) //iterates only below i=j axis
+                if(matrixData[i][j] != 0)       //returns false if non-zero value encountered
                     return false;
         return true;    //return true if no non-zeroes found
     }

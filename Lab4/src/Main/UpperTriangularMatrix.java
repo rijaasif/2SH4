@@ -51,7 +51,7 @@ public class UpperTriangularMatrix {
         Matrix result = new Matrix(n, n);
         for(int i=0; i<n; i++)
             for(int j=0; j<i; j++)          //iterates only below i=j axis
-                result.setElement(this.matrixData[i/n + j], i, j);
+                result.setElement(matrixData[i/n + j], i, j);
         return result;
     }
     
@@ -81,7 +81,7 @@ public class UpperTriangularMatrix {
     
     public double[] effSolve(double[] b) throws IllegalArgumentException {
         if(this.getDet() != 0) {
-            return new double[1];
+            return new double[1];   //WORKING ON IT
         } else {
             throw new IllegalArgumentException("Determinant is zero.");
         }
