@@ -107,11 +107,15 @@ public class Matrix {
         } else if(matArray.length == 1) {
             return matArray[0];
         } else {
-            int row = (matArray[0]).rowsNum;
-            int col = (matArray[0]).colsNum;
+            int row = matArray[0].rowsNum;
+            int col = matArray[0].colsNum;
             Matrix result = new Matrix(row, col);
-            for(int i=0; i<row; i++) {
-                result.addTo((matArray[i]).copy());
+            for(int i=0; i<matArray.length; i++) {
+                if(matArray[i].rowsNum == row && matArray[i].colsNum == col) {
+                    result.addTo(matArray[i]);
+                } else {
+                    throw new ArithmeticException("Different size matrices.");
+                }
             }
             return result;
         }

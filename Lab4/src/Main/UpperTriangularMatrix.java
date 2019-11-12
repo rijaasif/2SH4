@@ -13,35 +13,44 @@ public class UpperTriangularMatrix {
     
     //constructor 2
     public UpperTriangularMatrix(Matrix upTriM) throws IllegalArgumentException {
-        if(upTriM.isUpperTr()) {
-            n = upTriM.getRowsNum();
-            matrixData = new int[n*(n+1)/2];
-            for(int i=0; i<n; i++)
-                for(int j=0; j<i; j++)          //iterates only below i=j axis
-                    matrixData[i/n + j] = upTriM.getElement(i, j);
+        if(upTriM.getColsNum() == upTriM.getRowsNum()) {
+            if(upTriM.isUpperTr()) {
+                this.n = upTriM.getColsNum();
+                this.matrixData = new int[n*n];
+                int count = 0;
+                for(int i=0; i<n; i++) {
+                    for(int j=i; j<n; j++) {
+                        this.matrixData[count++] = upTriM.getElement(i, j);
+                    }
+                }
+            } else {
+                throw new IllegalArgumentException("Is not upper triangular.");
+            }
         } else {
-            throw new IllegalArgumentException("Is not upper triangular.");
+            throw new IllegalArgumentException("Not a square matrix.");
         }
     }
     
-    //returns the number of rows of *this* matrix
+    //returns the size of the matrix
     public int getDim() {
         return this.n;
     }
     
+    /* ONE DIMENSIONAL INDEX = n*i - i*(i-1)/2 + (j-i) */
+    
     public int getElement(int i, int j) throws IndexOutOfBoundsException{
-        if(i >= 0 && i <= n && j >= 0 && j <= n && j<i) {
-            return matrixData[i/n + j];
+        if(i >= 0 && i < n && j >= 0 && j < n && j >= i) {
+            return matrixData[n*i - i*(i-1)/2 + (j-i)];
         } else {
             throw new IndexOutOfBoundsException("Invalid indices.");
         }
     }
     
     public void setElement(int x, int i, int j) throws IndexOutOfBoundsException, IllegalArgumentException{
-        if(j >= i && x != 0) {
+        if(j < i && x != 0) {
             throw new IllegalArgumentException("Incorrect arguments.");
-        } else if(i >= 0 && i <= n && j >= 0 && j <= n) {
-            matrixData[i/n + j] = x;
+        } else if(i >= 0 && i < n && j >= 0 && j < n && j >= i) {
+            matrixData[n*i - i*(i-1)/2 + (j-i)] = x;
         } else {
             throw new IndexOutOfBoundsException("Invalid indices.");
         }
@@ -49,9 +58,10 @@ public class UpperTriangularMatrix {
     
     public Matrix fullMatrix() {
         Matrix result = new Matrix(n, n);
+        int count = 0;
         for(int i=0; i<n; i++)
-            for(int j=0; j<i; j++)          //iterates only below i=j axis
-                result.setElement(matrixData[i/n + j], i, j);
+            for(int j=n-1; j>=i && j>=0; j--)
+                result.setElement(matrixData[count++], i, j);
         return result;
     }
     
@@ -62,7 +72,7 @@ public class UpperTriangularMatrix {
     
     public String toString() {
         Matrix result = fullMatrix();
-        String output = new String();   // creates an empty string
+        String output = new String();
         for(int i=0; i<n; i++) {
             for(int j=0; j<n; j++)
                 output += result.getElement(i, j) + "  ";

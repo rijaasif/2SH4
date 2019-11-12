@@ -104,6 +104,8 @@ public class Test {
         int[][] temp3 = {{2,0,0,0,4},{0,2,1,1,4},{0,0,2,1,4},{0,0,0,2,6}};
         Matrix p = new Matrix(temp3);
         System.out.println(p.toString());
+        System.out.println(p.isUpperTr());
+        System.out.println("");
 
 
         //------------------------------------------------------------
@@ -184,6 +186,7 @@ public class Test {
         UpperTriangularMatrix m3=null, m4=null;
         int[][] temp12 = {{1,1,1,1,1},{0,2,2,2,2},{0,0,3,3,3},{0,0,0,4,4},{0,0,0,0,5}};
         Matrix mm1 = new Matrix(temp12);
+        
         try{
             m3 = new UpperTriangularMatrix(mm1);
             System.out.println("\nTest costructor2" );
