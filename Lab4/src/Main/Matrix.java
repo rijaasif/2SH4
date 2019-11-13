@@ -82,9 +82,9 @@ public class Matrix {
             Note: The new object should be constructed in such a way that changes in the new matrix do not affect
             this Matrix. */
         if(i >= 0 && i < rowsNum && j >= 0 && j < colsNum) {
-            int[][] subMatrix = new int[i][j];
-            for(int p=0; p<i; p++)
-                for(int q=0; q<j; q++)
+            int[][] subMatrix = new int[i+1][j+1];
+            for(int p=0; p<=i; p++)
+                for(int q=0; q<=j; q++)
                     subMatrix[p][q] = matrixData[p][q];
             return new Matrix(subMatrix);
         } else {

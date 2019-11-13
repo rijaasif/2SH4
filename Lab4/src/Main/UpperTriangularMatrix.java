@@ -6,7 +6,7 @@ public class UpperTriangularMatrix {
     
     //constructor
     public UpperTriangularMatrix(int n) {
-        this.n = n = (n <= 0) ? 1 : n;   //if n<=0, set to 1
+        this.n = (n <= 0) ? 1 : n;   //if n<=0, set to 1
         int size = this.n*(this.n+1)/2;
         matrixData = new int[size];
     }
@@ -24,6 +24,7 @@ public class UpperTriangularMatrix {
                     }
                 }
             } else {
+                this.n = upTriM.getRowsNum();
                 throw new IllegalArgumentException("Is not upper triangular.");
             }
         } else {
@@ -39,8 +40,11 @@ public class UpperTriangularMatrix {
     /* ONE DIMENSIONAL INDEX = n*i - i*(i-1)/2 + (j-i) */
     
     public int getElement(int i, int j) throws IndexOutOfBoundsException{
-        if(i >= 0 && i < n && j >= 0 && j < n && j >= i) {
-            return matrixData[n*i - i*(i-1)/2 + (j-i)];
+        if(i >= 0 && i < n && j >= 0 && j < n) {
+            if(j >= i)
+                return matrixData[n*i - i*(i-1)/2 + (j-i)];
+            else
+                return 0;
         } else {
             throw new IndexOutOfBoundsException("Invalid indices.");
         }
@@ -58,10 +62,14 @@ public class UpperTriangularMatrix {
     
     public Matrix fullMatrix() {
         Matrix result = new Matrix(n, n);
-        int count = 0;
-        for(int i=0; i<n; i++)
-            for(int j=n-1; j>=i && j>=0; j--)
-                result.setElement(matrixData[count++], i, j);
+        int k;
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<n; j++) {
+                if(j >= i) {
+                    result.setElement(matrixData[n*i - i*(i-1)/2 + (j-i)], i, j);
+                }
+            }
+        }
         return result;
     }
     
@@ -83,7 +91,7 @@ public class UpperTriangularMatrix {
     
     public int getDet() {
         int det = 1;
-        Matrix temp = new Matrix(n, n);
+        Matrix temp = this.fullMatrix();
         for(int i=0; i<n; i++) 
             det *= temp.getElement(i, i);
         return det;
