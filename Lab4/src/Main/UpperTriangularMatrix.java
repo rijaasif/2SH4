@@ -16,7 +16,7 @@ public class UpperTriangularMatrix {
         if(upTriM.getColsNum() == upTriM.getRowsNum()) {
             if(upTriM.isUpperTr()) {
                 this.n = upTriM.getColsNum();
-                this.matrixData = new int[n*n];
+                this.matrixData = new int[n*(n+1)/2];
                 int count = 0;
                 for(int i=0; i<n; i++) {
                     for(int j=i; j<n; j++) {
@@ -62,7 +62,6 @@ public class UpperTriangularMatrix {
     
     public Matrix fullMatrix() {
         Matrix result = new Matrix(n, n);
-        int k;
         for(int i=0; i<n; i++) {
             for(int j=0; j<n; j++) {
                 if(j >= i) {
@@ -92,16 +91,29 @@ public class UpperTriangularMatrix {
     public int getDet() {
         int det = 1;
         Matrix temp = this.fullMatrix();
-        for(int i=0; i<n; i++) 
+        for(int i=0; i<this.n; i++) 
             det *= temp.getElement(i, i);
         return det;
     }
     
     public double[] effSolve(double[] b) throws IllegalArgumentException {
-        if(this.getDet() != 0) {
-            return new double[1];   //WORKING ON IT
-        } else {
+        if(this.getDet() != 0) { 
+            if(this.n == b.length) {
+                double[] x = new double[n];
+                for(int i=n-1; i>=0; i--) {
+                    // n*i - i*(i-1)/2 transforms [i][i] from 2D representation into 1D index
+                    int lead = matrixData[n*i - i*(i-1)/2];     //this is the leading coefficient of the row
+                    x[i] = b[i] / lead;             //everything in the row should be divided by the lead
+                    for(int j=n-1; j>i; j--)        //iterates along the row, col to col
+                        x[i] -= this.matrixData[n*i - i*(i-1)/2 + (j-i)] * x[j] / lead;
+                }
+                return x;
+            } else {
+                throw new IllegalArgumentException("Incompatible vector size.");
+            }
+        } else { 
             throw new IllegalArgumentException("Determinant is zero.");
         }
     }
+    
 }
