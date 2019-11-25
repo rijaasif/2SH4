@@ -102,17 +102,17 @@ public class Matrix {
     }
     
     public static Matrix sum(Matrix[] matArray) throws ArithmeticException {
-        if(matArray.length <= 0) {
+        if(matArray.length <= 0) {      //ensures valid arguments
             throw new ArithmeticException("No matrix to add.");
-        } else if(matArray.length == 1) {
+        } else if(matArray.length == 1) {       //shortcut if length == 1
             return matArray[0];
         } else {
-            int row = matArray[0].rowsNum;
-            int col = matArray[0].colsNum;
-            Matrix result = new Matrix(row, col);
-            for(int i=0; i<matArray.length; i++) {
-                if(matArray[i].rowsNum == row && matArray[i].colsNum == col) {
-                    result.addTo(matArray[i]);
+            int row = matArray[0].rowsNum;  //assign row length
+            int col = matArray[0].colsNum;  //assign col length
+            Matrix result = new Matrix(row, col);      //newe matrix object for resulting sum
+            for(int i=0; i<matArray.length; i++) {      //iterates across list of matrices
+                if(matArray[i].rowsNum == row && matArray[i].colsNum == col) {      //ensures all matrices are correct dimensions
+                    result.addTo(matArray[i]);      //add each matrix to the result
                 } else {
                     throw new ArithmeticException("Different size matrices.");
                 }
@@ -128,8 +128,8 @@ public class Matrix {
         String output = new String();   // creates an empty string
         for(int i=0; i<rowsNum; i++) {
             for(int j=0; j<colsNum; j++)
-                output += matrixData[i][j] + "  ";
-            output += "\n";
+                output += matrixData[i][j] + "  ";  //
+            output += "\n";     //new row/line
         }
         return output;
     }
