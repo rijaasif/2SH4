@@ -54,17 +54,14 @@ public class SLLSet {
     
     public void add(int value) {
         SLLNode current = this.head;
-        boolean isIn = false;   // I could call isIn() method, but would cause 2*n runtime
-        
-        // TODO : ADD WHILE KEEPING THE LIST SORTED
         
         while(current.next != null) {       // iterate until end of LL
-            
             if(current.value == value) {    // if value is in LL...
-                isIn = true;    //...raise the flag
                 break;          //...stop the loop
+            } else if(current.next.value > value) {
+                SLLNode temp = new SLLNode(value, current.next.next);
+                current.next = temp;
             }
-            
             current = current.next; // go to next node
         }
     }
@@ -88,10 +85,10 @@ public class SLLSet {
         SLLNode currentB = set.head;
         
         while(currentA.next != null || currentB.next != null) {
-            if(currentA.value < currentB.value) {
+            if (currentA.value < currentB.value) {
                 current = new SLLNode(currentA.value, null);
                 currentA = currentA.next;
-            } else if(currentB.value < currentA.value) {
+            } else if (currentB.value < currentA.value) {
                 current = new SLLNode(currentB.value, null);
                 currentB = currentB.next;
             } else {
@@ -101,7 +98,6 @@ public class SLLSet {
             }
             current = current.next;
         }
-        
         if(currentA.next == null) {
             while(currentB.next != null) {
                 current = new SLLNode(currentB.value, null);
