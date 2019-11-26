@@ -16,8 +16,8 @@ public class SLLSet {
             the 'head' of the linked list iteratively gets pushed up */
         head = new SLLNode(sortedArray[size-1], null); // initializes the "head"; after the loop, this node will actually be the 'end'
         for(int i=size-2; i>=0; i--) {
-            SLLNode current = new SLLNode(sortedArray[i], head);
-            head = current;
+            SLLNode temp = new SLLNode(sortedArray[i], head);
+            head = temp;
         }
     }
     
@@ -97,20 +97,14 @@ public class SLLSet {
                 currentB = currentB.next;
             }
             current = current.next;
-        }
-        if(currentA.next == null) {
-            while(currentB.next != null) {
-                current = new SLLNode(currentB.value, null);
-                currentB = currentB.next;
-                current = current.next;
-            }
-        }
-        if(currentB.next == null) {
-            while(currentA.next != null) {
-                current = new SLLNode(currentA.value, null);
-                currentA = currentA.next;
-                current = current.next;
-            }
+        } while(currentB.next != null) {
+            current = new SLLNode(currentB.value, null);
+            currentB = currentB.next;
+            current = current.next;
+        } while(currentA.next != null) {
+            current = new SLLNode(currentA.value, null);
+            currentA = currentA.next;
+            current = current.next;
         }
         
         return union;
@@ -122,13 +116,40 @@ public class SLLSet {
         SLLNode currentA = this.head;
         SLLNode currentB = set.head;
         
-        while(currentA.next != null || currentB.next != null) {
-            if(currentA.value == currentB.value) {
+        while(currentA.next != null && currentB.next != null) {
+            if (currentA.value < currentB.value) {
+                currentA = currentA.next;
+            } else if (currentB.value < currentA.value) {
+                currentB = currentB.next;
+            } else {
                 current = new SLLNode(currentA.value, null);
+                current = current.next;
+                currentA = currentA.next;
+                currentB = currentB.next;
             }
-            current = current.next;
         }
         
         return intersect;
+    }
+    
+    public SLLSet difference(SLLSet set) {
+        SLLSet difference = new SLLSet();
+        SLLNode current = difference.head;
+        SLLNode currentA = this.head;
+        SLLNode currentB = set.head;
+        SLLNode temp;
+        
+        while(currentA.next != null) {
+            while(currentB.next != null) {
+                if (currentA.value == currentB.value) {
+                    break;
+                } 
+                currentB = currentB.next;
+            }
+            currentA = currentA.next;
+            currentB = set.head;
+        }
+        
+        return difference;
     }
 }
