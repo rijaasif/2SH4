@@ -25,107 +25,185 @@ public class SLLSet {
     public int getSize() { return size; }
     
     public SLLSet copy() {
-        if(this.head == null) { return new SLLSet(); }   // if the head is null, return empty set
+        /* special case if LL is null */
+        if(this.head == null) { return null; }
         
-        SLLSet copy = new SLLSet();     
+        SLLNode current = this.head;    // set a node for current
+        int n = this.size;              // variable for size of LL
+        int[] copyValues = new int[n];  // array to store values of LL
         
-        SLLNode currentA = this.head;   // current node for original LL
-        SLLNode currentB = copy.head;   // current node for copy LL
-        
-        currentB = new SLLNode(currentA.value, null);   // initializes the head for copy
-        while(currentA.next != null) {
-            currentA = currentA.next;   // iterate original LL
-            currentB.next = new SLLNode(currentA.value, null);  // assign the 'next' 
-            currentB = currentB.next;   // iterate copy LL
+        for(int i=0; i<n; i++) {    // put the values of LL in an array
+            copyValues[i] = current.value;
+            current = current.next;
         }
         
-        return copy;    //return the copy
+        return new SLLSet(copyValues);  // return a new SSLSet with same values
     }
     
     public boolean isIn(int value) {
         SLLNode current = this.head;    // sets current node
+        
         while(current.next != null) {   // reach until end of LL
             if(current.value == value)  // if value matches...
                 return true;            // ...return false
             current = current.next; // go to next node
         }
+        
         return false;   // by default return false
     }
     
+    // I can just do null return statements to simplify this
     public void add(int value) {
-        SLLNode current = this.head;
+        SLLNode current = this.head;    // the current node
         
+        /* only occurs if value is smaller than sart (prepend to start) */
+        if(value < current.value) {     // check if add to start of LL
+            SLLNode newHead = new SLLNode(value, current);  // make a new head
+            this.head = newHead;    // assign instance variable to new head
+            this.size++;    // increment size of LL
+            return;
+        }
+        
+        /* if the value is inserted in the middle of LL  */
         while(current.next != null) {       // iterate until end of LL
             if(current.value == value) {    // if value is in LL...
-                break;          //...stop the loop
-            } else if(current.next.value > value) {
-                SLLNode temp = new SLLNode(value, current.next.next);
-                current.next = temp;
+                return;
+            } else if(current.next.value > value) {     // this ensures that value is added in sorted order
+                SLLNode temp = new SLLNode(value, current.next);    // temp node that points to next node
+                current.setNext(temp);  // current node points to temp node, completing the link
+                this.size++;        // increment size of LL by one
+                return;
             }
-            current = current.next; // go to next node
+            current = current.next; // iterate through LL
         }
+        
+        /* only occurs if the value is larger than data in LL (appends to endt) */
+        current.next = new SLLNode(value, null);
+        this.size++;    // increment size of LL
     }
     
     public void remove(int value) {
-        SLLNode current = this.head;
+        /* case if the LL is null/empty */
+        if(this.head == null) { return; }
         
-        while(current.next != null) {       // iterate until end of LL
+        /* if first node is to be removed */
+        if(this.head.value == value) {      // if head equals value
+            this.head = this.head.next;     // set next as new head
+            this.size--;    // decrement size of LL
+            return;     // exit method
+        }
+        
+        /* if last or middle node is to be removed */
+        SLLNode current = this.head;    // current node
+        while(current.next != null) {   // iterate until end of LL
             if(current.next.value == value) {    // if next node's value is to be removed...
                 current.next = current.next.next;   //...assign the next, next node to current next node
-                break;                              //...and stop the loop
+                this.size--;    // decrement size of LL
+                return;         // exit method
             }
             current = current.next; // go to next node
         }
     }
     
     public SLLSet union(SLLSet set) {
-        SLLSet union = new SLLSet();
-        SLLNode current = union.head;
-        SLLNode currentA = this.head;
-        SLLNode currentB = set.head;
+        /* special cases if either LL is empty */
+        if(this.head == null) { return set; }   // if either set is empty, the union is the other set
+        if(set.head == null) { return this; }
         
-        while(currentA.next != null || currentB.next != null) {
-            if (currentA.value < currentB.value) {
-                current = new SLLNode(currentA.value, null);
-                currentA = currentA.next;
-            } else if (currentB.value < currentA.value) {
-                current = new SLLNode(currentB.value, null);
-                currentB = currentB.next;
-            } else {
-                current = new SLLNode(currentA.value, null);
-                currentA = currentA.next;
-                currentB = currentB.next;
-            }
-            current = current.next;
-        } while(currentB.next != null) {
-            current = new SLLNode(currentB.value, null);
+        SLLSet union = new SLLSet();    // new LL for the union set
+        SLLNode currentA = this.head;   // current node for set A (this set)
+        SLLNode currentB = set.head;    // current node for set B (given set)
+        
+        /* initializes the head */
+        if (currentA.value < currentB.value) {              // if A is less than B...
+            union.head = new SLLNode(currentA.value, null);     // ...set head
+            currentA = currentA.next;                           // ...iterate up A
+        } else if (currentB.value < currentA.value) {       // if B is less than A...
+            union.head = new SLLNode(currentB.value, null);     // ...set head
+            currentB = currentB.next;                           // ...iterate up B
+        } else {                                            // A equals B...
+            union.head = new SLLNode(currentA.value, null);     // ...set head
+            currentA = currentA.next;                           // ...iterate up both A and B
             currentB = currentB.next;
-            current = current.next;
-        } while(currentA.next != null) {
-            current = new SLLNode(currentA.value, null);
-            currentA = currentA.next;
+        }
+        union.size++;   // increment size of union set
+        
+        SLLNode current = union.head;   // current node for union LL
+        
+        /* iterates through rest of the sets, up to the shortest one */
+        while(currentA != null && currentB != null) {
+            if (currentA.value < currentB.value) {                  // if A < B...
+                current.next = new SLLNode(currentA.value, null);   // ...append to U
+                currentA = currentA.next;   // ...iterate up A
+                union.size++;               // ...increment size of union set
+            } else if (currentB.value < currentA.value) {           // if B < A...
+                current.next = new SLLNode(currentB.value, null);   // ...append to U
+                currentB = currentB.next;   // ...iterate up B
+                union.size++;               // ...increment size of union set
+            } else {                                                // if B = A...
+                current.next = new SLLNode(currentA.value, null);   // ...append to U
+                currentA = currentA.next;   // ...iterate BOTH A and B
+                currentB = currentB.next;
+                union.size++;               // ...increment size of union set
+            }
             current = current.next;
         }
         
-        return union;
+        /* iterates through the larger list and adds the rest */
+        while(currentB != null) {
+            current.next = new SLLNode(currentB.value, null);
+            currentB = currentB.next;
+            current = current.next;
+            union.size++;
+        }
+        while(currentA != null) {
+            current.next = new SLLNode(currentA.value, null);
+            currentA = currentA.next;
+            current = current.next;
+            union.size++;
+        }
+        
+        return union;   // return the resultant union
     }
     
-    public SLLSet intersect(SLLSet set) {
-        SLLSet intersect = new SLLSet();
-        SLLNode current = intersect.head;
-        SLLNode currentA = this.head;
-        SLLNode currentB = set.head;
+    public SLLSet intersection(SLLSet set) {
+        /* special cases if either LL is empty */
+        if(this.head == null) { return new SLLSet(); }      // if either set is empty, there is no intersect
+        if(set.head == null) { return new SLLSet(); }
         
-        while(currentA.next != null && currentB.next != null) {
-            if (currentA.value < currentB.value) {
+        SLLSet intersect = new SLLSet();    // create new set to store intersect
+        SLLNode currentA = this.head;       // current node for set A (this set)
+        SLLNode currentB = set.head;        // current node for set B (given set)
+        
+        /* initialize the head of intersection set */
+        while(currentA != null && currentB != null) {
+            if (currentA.value < currentB.value) {      // if A < B...
+                currentA = currentA.next;               // ...iterate A 
+            } else if (currentB.value < currentA.value) {   // if B < A...
+                currentB = currentB.next;                   // ...iterate B
+            } else {                                                    // if A = B...
+                intersect.head = new SLLNode(currentA.value, null);     // ...set the head to value
+                currentA = currentA.next;                               // ...iterate both A and B
+                currentB = currentB.next;
+                intersect.size++;           // ...increment size of intersect
+                break;  // ...exit loop
+            }
+        }
+        
+        SLLNode current = intersect.head;   // assign current node for intersect head
+        
+        /* iterates through rest of the list, up to the shorter one */
+        while(currentA != null && currentB != null) {
+            if (currentA.value < currentB.value) {              // iterates until match is found, similar to head initialization
                 currentA = currentA.next;
             } else if (currentB.value < currentA.value) {
                 currentB = currentB.next;
-            } else {
-                current = new SLLNode(currentA.value, null);
-                current = current.next;
+            } else {                                                // if A = B...
+                current.next = new SLLNode(currentA.value, null);   // ...append to intersection
+                current = current.next;                             // ...iterate all lists
                 currentA = currentA.next;
                 currentB = currentB.next;
+                intersect.size++;               // ...increment size
             }
         }
         
@@ -133,23 +211,46 @@ public class SLLSet {
     }
     
     public SLLSet difference(SLLSet set) {
-        SLLSet difference = new SLLSet();
-        SLLNode current = difference.head;
-        SLLNode currentA = this.head;
-        SLLNode currentB = set.head;
-        SLLNode temp;
+        /* special cases if either LL is empty */
+        if(this.head == null) { return new SLLSet(); }  // if this set is null, return empty set
+        if(set.head == null) { return this; }           // if the given set is null, return this set
         
-        while(currentA.next != null) {
-            while(currentB.next != null) {
-                if (currentA.value == currentB.value) {
-                    break;
-                } 
-                currentB = currentB.next;
-            }
-            currentA = currentA.next;
-            currentB = set.head;
+        SLLSet difference = this.copy();                // initialize difference with *this* set
+        SLLSet intersect = this.intersection(set);      // initialize intersect of both sets
+        
+        /* essentially performs A - (A∩B) (A is this set, B is given set) */
+        SLLNode current = intersect.head;       // set current to intersect
+        while(current != null) {                // iterate until end of intersect
+            difference.remove(current.value);   // SUBTRACT intersect from difference
+            current = current.next;     // iterate
         }
         
-        return difference;
+        return difference;  // return resultant difference
+    }
+    
+    public static SLLSet union(SLLSet[] sArray) {
+        SLLSet result = new SLLSet();   // list set to store result of unions
+        for(int i=0; i<sArray.length; i++) {    // iterate through array of linked lists
+            result = result.union(sArray[i]);   // perform union of each array with result
+        }
+        return result;
+    }
+    
+    public String toString() {
+        /* special case for empty set */
+        if(this.head == null) { return "EMPTY"; }
+        
+        String list = "";   // variable to store string of values
+        SLLNode current = this.head;    // current node for this list
+        
+        /* iterate to end of list and keep adding value to string */ 
+        while(current != null) {
+            list += current.value;
+            if(current.next != null)    // don't add comma at end
+                list += ",";
+            current = current.next;
+        }
+        
+        return list;    // return the string
     }
 }

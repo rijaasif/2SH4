@@ -16,6 +16,6 @@ public class SLLNode {
     
     /* setters */
     public void setValue(int value) { this.value = value; }
-    public void setNext(SLLNode next) {this.next = next;}
+    public void setNext(SLLNode next) { this.next = next; }
     
 }
